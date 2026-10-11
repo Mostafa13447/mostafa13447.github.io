@@ -1,16 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="简密 (jianmi) - 自托管零知识密码管理器，原生 macOS + Rust 服务端，使用 libsodium 加密。你的密码，100% 安全。">
+    <meta name="keywords" content="password-manager,zero-knowledge,self-hosted,rust,macos,swift,swiftui,libsodium,browser-extension,security,密码管理器,jianmi">
+    <meta property="og:title" content="🔐 jianmi - 简单密码，100%安全">
+    <meta property="og:description" content="自托管零知识密码管理器，原生 macOS + Rust 服务端，使用 libsodium 加密。你的密码，100% 安全。">
+    <meta property="og:url" content="https://github.com/Mostafa13447/jianmi">
+    <meta property="og:type" content="website">
+    <title>🔐 jianmi - 自托管零知识密码管理器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .hero {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 30px 0 40px;
+        }
+        .hero h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #495057;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .btn-primary {
+            display: inline-block;
+            background: #4263eb;
+            color: white !important;
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(66, 99, 235, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 0;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 99, 235, 0.5);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .feature-card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .feature-card p {
+            margin-bottom: 0;
+            color: #495057;
+        }
+        .steps {
+            background: white;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin: 30px 0;
+        }
+        .steps ol {
+            padding-left: 25px;
+        }
+        .steps li {
+            padding-left: 8px;
+        }
+        code {
+            background: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+        }
+        .note {
+            background: #fff3bf;
+            border-left: 4px solid #fcc419;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .note p {
+            margin-bottom: 5px;
+        }
+        a {
+            color: #4263eb;
+        }
+        a:hover {
+            color: #364fc7;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .hero {
+                padding: 40px 25px;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .hero {
+                padding: 30px 15px;
+            }
+            .btn-primary {
+                padding: 14px 24px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
 
-<!doctype html>
-<html lang="en"><head>
-<meta name="google-site-verification" content="S04MZ7Zf4XfgM-CB73KYIlxih5gitDxR-bhmGgfYY0A" />
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Free business tools for invoices, estimates, receipts and profit calculations. No signup required."><title>Free Online Tools | Invoices, Estimates, Receipts &amp; Profit</title><style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#172235;background:#f3f6fb}*{box-sizing:border-box}body{margin:0}header{background:#101c31;color:white;padding:28px 18px;text-align:center}header h1{margin:0 0 8px}header p{margin:0;color:#c6d4e8}.wrap{max-width:1050px;margin:auto;padding:24px 16px}nav{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:11px 16px;background:#1765cc;color:white}button:hover{filter:brightness(.93)}nav a{background:#e2eaf5;color:#183152}nav a.active{background:#1765cc;color:white}.panel{display:none;background:white;border:1px solid #dce4ee;border-radius:14px;padding:24px;box-shadow:0 5px 24px #142c4b0a}.panel.active{display:block}h2{margin-top:0}h3{margin-bottom:8px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:5px;margin:10px 0}label{font-size:14px;font-weight:650}input,textarea,select{width:100%;padding:10px;border:1px solid #b7c5d6;border-radius:7px;font:inherit;color:#172235;background:white}textarea{min-height:70px}.wide{grid-column:1/-1}.items{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:8px;border-bottom:1px solid #e0e7ef;text-align:left}th{font-size:13px}td input{min-width:85px}td:first-child input{min-width:160px}.totals{margin-left:auto;max-width:330px}.totals p{display:flex;justify-content:space-between;gap:20px}.totals .grand{font-size:23px;font-weight:800;border-top:2px solid #172235;padding-top:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.secondary{background:#e4ebf5;color:#20344e}.danger{background:#fce7e7;color:#a31b1b}.hint{color:#52667f;font-size:14px}.hero{padding:12px 0 18px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.card{padding:22px;border:1px solid #dce4ee;border-radius:12px;background:#f8fbff}.card h3{margin-top:0}.result{background:#edf5ff;border-radius:10px;padding:18px;margin:18px 0}.result strong{font-size:25px}.print-only{display:none}footer{text-align:center;color:#5a6c81;font-size:13px;padding:25px}#printSheet{display:none}@media(max-width:650px){.grid,.cards{grid-template-columns:1fr}.panel{padding:16px}nav a{flex:1 1 40%}}@media print{body{background:white}header,nav,.wrap,footer{display:none!important}#printSheet{display:block!important;padding:12mm;color:black;font-family:Arial,sans-serif}#printSheet table{width:100%;border-collapse:collapse}#printSheet td,#printSheet th{border-bottom:1px solid #ddd;padding:9px;text-align:left}#printSheet .right{text-align:right}#printSheet h1{font-size:27px}#printSheet .summary{margin-left:auto;width:280px}#printSheet .summary p{display:flex;justify-content:space-between}#printSheet .total{font-size:20px;font-weight:bold;border-top:2px solid black;padding-top:10px}}
-nav a,.tool-link{display:inline-block;text-decoration:none;border-radius:9px;padding:11px 16px}nav a{font-weight:600}.tool-link{background:#1765cc;color:white}nav a:focus-visible,.tool-link:focus-visible{outline:3px solid #e99d1c;outline-offset:2px}</style><link rel="canonical" href="https://satpa2310.github.io/--index.html/index.html"><meta property="og:title" content="Free Online Tools | Invoices, Estimates, Receipts &amp; Profit"><meta property="og:description" content="Free business tools for invoices, estimates, receipts and profit calculations. No signup required."></head><body><header><h1>Free Online Tools</h1><p>Professional business tools. Free to use. No signup required.</p></header><main class="wrap"><nav aria-label="Tools"><a class="active" href="index.html">Home</a><a class="" invoice_v6_1.html">Invoice</a><a class="" href="estimate.html">Estimate</a><a class="" href="receipt.html">Receipt</a><a class="" href="profit.html">Profit Calculator</a></nav><section id="home" class="panel active"><p class="hint">Choose a free tool above to create a printable business document or calculate profit. All calculations run in your browser; no account is required.</p><div class="hero"><h2>Get your paperwork done in minutes</h2><p>Create invoices, quotes and receipts, or calculate your profit — right in your browser.</p></div><div class="cards"><div class="card"><h3>Invoice Generator</h3><p>Bill customers with itemized totals and optional sales tax.</p><a class="tool-link" invoice_v6_1.html">Create invoice</a></div><div class="card"><h3>Estimate Generator</h3><p>Send clear quotes before starting a job.</p><a class="tool-link" href="estimate.html">Create estimate</a></div><div class="card"><h3>Receipt Generator</h3><p>Provide a record of payment for completed work.</p><a class="tool-link" href="receipt.html">Create receipt</a></div><div class="card"><h3>Profit Calculator</h3><p>See revenue, expenses, margin and markup instantly.</p><a class="tool-link" href="profit.html">Calculate profit</a></div></div><p class="hint">Your information stays in your browser. Nothing is sent to our server. Use Print / Save PDF to keep a copy.</p></section><section id="invoice" class="panel doc"><h2>Free Invoice Generator</h2><p class="hint">Fill in the details, add line items, then print or save as PDF.</p><div class="form"></div></section><section id="estimate" class="panel doc"><h2>Free Estimate Generator</h2><p class="hint">Create a quote for a customer. Estimates are not invoices.</p><div class="form"></div></section><section id="receipt" class="panel doc"><h2>Free Receipt Generator</h2><p class="hint">Use this only for payments actually received.</p><div class="form"></div></section><section id="profit" class="panel"><h2>Profit Calculator</h2><p>Calculate gross profit for a job or sale. Enter all direct expenses for the result to be meaningful.</p><div class="grid"><div class="field"><label for="revenue">Revenue ($)</label><input id="revenue" type="number" min="0" step="0.01" value="1000"></div><div class="field"><label for="expenses">Total expenses ($)</label><input id="expenses" type="number" min="0" step="0.01" value="600"></div></div><div class="result" aria-live="polite"><p>Profit: <strong id="profitValue">$400.00</strong></p><p>Profit margin: <b id="marginValue">40.00%</b></p><p>Markup on cost: <b id="markupValue">66.67%</b></p></div><p class="hint">Profit = revenue − expenses. Margin = profit ÷ revenue. Markup = profit ÷ expenses. This is a simple calculator, not tax or accounting advice.</p></section></main><div id="printSheet" aria-hidden="true"></div><footer>Free Online Tools • No signup • Built for small businesses</footer><script>
-'use strict';const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number.isFinite(n)?n:0);const safe=n=>Math.max(0,Number(n)||0);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const today=()=>new Date().toLocaleDateString('en-CA');const names={invoice:'Invoice',estimate:'Estimate',receipt:'Receipt'};const forms={};
-function field(label,key,type='text',placeholder=''){return `<div class="field"><label>${label}<input data-key="${key}" type="${type}" ${type==='number'?'min="0" step="0.01"':''} placeholder="${placeholder}"></label></div>`}
-function makeForm(kind){const root=document.querySelector('#'+kind+' .form');root.innerHTML=`<div class="grid">${field('Your business / name','business')}${field('Customer name','customer')}${field('Your contact information','contact','text','Email or phone')}${field('Customer contact','customerContact')}${field(names[kind]+' number','number')}${field(kind==='estimate'?'Estimate date':kind==='receipt'?'Payment date':'Invoice date','date','date')}${kind==='invoice'?field('Due date','due','date'):''}${kind==='receipt'?field('Payment method','payment','text','Cash, card, transfer...'):''}</div><h3>Line items</h3><div class="items"><table><thead><tr><th>Description</th><th>Qty</th><th>Rate ($)</th><th>Amount</th><th></th></tr></thead><tbody class="lines"></tbody></table></div><button class="secondary add" type="button">+ Add item</button><div class="grid"><div class="field"><label>Tax rate (%)<input class="tax" type="number" min="0" max="100" step="0.01" value="0"></label></div><div class="field"><label>Notes<textarea class="notes" placeholder="Optional notes or terms"></textarea></label></div></div><div class="totals" aria-live="polite"><p>Subtotal <b class="subtotal">$0.00</b></p><p>Tax <b class="taxValue">$0.00</b></p><p class="grand">Total <span class="total">$0.00</span></p></div><div class="actions"><button class="print" type="button">Print / Save PDF</button><button class="secondary reset" type="button">Clear form</button></div><p class="hint">To save as PDF, choose “Save as PDF” in your browser's print dialog. Data is not automatically saved.</p>`;forms[kind]=root;root.querySelector('[data-key=date]').value=today();root.querySelector('[data-key=number]').value=kind.toUpperCase()+'-001';root.querySelector('.add').addEventListener('click',()=>addLine(kind));root.querySelector('.lines').addEventListener('click',e=>{if(e.target.classList.contains('remove')){e.target.closest('tr').remove();calc(kind)}});root.addEventListener('input',()=>calc(kind));root.querySelector('.print').addEventListener('click',()=>printDoc(kind));root.querySelector('.reset').addEventListener('click',()=>{if(confirm('Clear this form?')){makeForm(kind)}});addLine(kind)}
-function addLine(kind){const tr=document.createElement('tr');tr.innerHTML='<td><input aria-label="Item description" class="desc" placeholder="Service or item"></td><td><input aria-label="Quantity" class="qty" type="number" min="0" step="0.01" value="1"></td><td><input aria-label="Rate" class="rate" type="number" min="0" step="0.01" value="0"></td><td class="amount">$0.00</td><td><button class="danger remove" type="button" aria-label="Remove item">×</button></td>';forms[kind].querySelector('.lines').append(tr);calc(kind)}
-function getDoc(kind){const root=forms[kind],val=k=>root.querySelector(`[data-key="${k}"]`)?.value||'';const items=[...root.querySelectorAll('.lines tr')].map(tr=>({desc:tr.querySelector('.desc').value,qty:safe(tr.querySelector('.qty').value),rate:safe(tr.querySelector('.rate').value)}));const subtotal=items.reduce((s,x)=>s+x.qty*x.rate,0);const taxRate=Math.min(100,safe(root.querySelector('.tax').value));const tax=subtotal*taxRate/100;return {business:val('business'),customer:val('customer'),contact:val('contact'),customerContact:val('customerContact'),number:val('number'),date:val('date'),due:val('due'),payment:val('payment'),items,subtotal,taxRate,tax,total:subtotal+tax,notes:root.querySelector('.notes').value}}
-function calc(kind){const d=getDoc(kind);forms[kind].querySelectorAll('.lines tr').forEach((tr,i)=>tr.querySelector('.amount').textContent=money(d.items[i].qty*d.items[i].rate));for(const [sel,v] of [['.subtotal',d.subtotal],['.taxValue',d.tax],['.total',d.total]])forms[kind].querySelector(sel).textContent=money(v)}
-function printDoc(kind){const d=getDoc(kind),title=names[kind];const details=[['Number',d.number],['Date',d.date],...(kind==='invoice'?[['Due',d.due]]:[]),...(kind==='receipt'?[['Payment method',d.payment]]:[])].filter(x=>x[1]).map(x=>`<p><b>${esc(x[0])}:</b> ${esc(x[1])}</p>`).join('');document.getElementById('printSheet').innerHTML=`<h1>${title}</h1><div style="display:flex;justify-content:space-between;gap:30px"><div><h3>From</h3><p>${esc(d.business)}</p><p>${esc(d.contact)}</p><h3>Bill to</h3><p>${esc(d.customer)}</p><p>${esc(d.customerContact)}</p></div><div>${details}</div></div><table><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th class="right">Amount</th></tr></thead><tbody>${d.items.map(x=>`<tr><td>${esc(x.desc)}</td><td>${x.qty}</td><td>${money(x.rate)}</td><td class="right">${money(x.qty*x.rate)}</td></tr>`).join('')}</tbody></table><div class="summary"><p><span>Subtotal</span><span>${money(d.subtotal)}</span></p><p><span>Tax (${d.taxRate}%)</span><span>${money(d.tax)}</span></p><p class="total"><span>Total</span><span>${money(d.total)}</span></p></div>${d.notes?`<h3>Notes</h3><p style="white-space:pre-wrap">${esc(d.notes)}</p>`:''}${kind==='estimate'?'<p>This document is an estimate, not a request for payment.</p>':kind==='receipt'?'<p>Payment receipt — issue only for payment received.</p>':''}`;window.print()}
-Object.keys(names).forEach(makeForm);function profit(){const r=safe(document.getElementById('revenue').value),e=safe(document.getElementById('expenses').value),p=r-e;document.getElementById('profitValue').textContent=money(p);document.getElementById('marginValue').textContent=r?(100*p/r).toFixed(2)+'%':'N/A';document.getElementById('markupValue').textContent=e?(100*p/e).toFixed(2)+'%':'N/A'}['revenue','expenses'].forEach(id=>document.getElementById(id).addEventListener('input',profit));profit();
-</script></body></html>
+<div class="hero">
+    <h1>🔐 jianmi - 你的密码，100%安全</h1>
+    <p>轻松记录所有密码，简密采用先进的零知识加密技术，确保你的数据只有你能看到。</p>
+    <a href="https://github.com/Mostafa13447/jianmi/releases" class="btn-primary" style="background: #099268; box-shadow: 0 4px 15px rgba(9, 146, 104, 0.4);">⬇️ 立即下载</a>
+</div>
+
+<h2>📖 什么是简密 (jianmi)?</h2>
+<p>简密是一款简洁安全的密码管理工具。想象一下，你只需要记住一个主密码，就能安全地管理所有的其他密码——无论是网银、邮箱、还是各种网站的登录信息。</p>
+<p>与传统密码管理器不同，简密是<strong>零知识</strong>架构：这意味着你的所有数据在离开你的设备之前就已经被加密，即使是服务器管理员也无法查看你的任何信息。你的密码，只有你一个人知道。</p>
+<p>简密完全免费，开源自托管，你可以随时掌控自己的数据。</p>
+
+<h2>✨ 核心功能特色</h2>
+<div class="feature-grid">
+    <div class="feature-card">
+        <h3>🔒 零知识加密</h3>
+        <p>使用世界顶级的 libsodium 加密库，你的数据以 AES-256 加密后存储在服务器上，服务端完全不接触你的明文密码。</p>
+    </div>
+    <div class="feature-card">
+        <h3>🧠 简单易用</h3>
+        <p>界面设计极简，没有繁琐的操作。三步之内即可完成密码的添加、查找和复制。专为普通用户设计。</p>
+    </div>
+    <div class="feature-card">
+        <h3>🌐 浏览器扩展</h3>
+        <p>支持主流浏览器扩展，自动填充网页登录表单，让你在浏览网页时无需手动输入密码，更快更安全。</p>
+    </div>
+    <div class="feature-card">
+        <h3>🏠 自托管</h3>
+        <p>数据完全由你自己掌控，可以部署在自己的服务器上（支持 macOS 及 Linux 环境），不依赖任何第三方云服务。</p>
+    </div>
+    <div class="feature-card">
+        <h3>⚡️ 原生性能</h3>
+        <p>采用原生 Swift/SwiftUI 开发 macOS 客户端，配合 Rust 编写的高性能服务端，启动迅速，操作流畅无卡顿。</p>
+    </div>
+    <div class="feature-card">
+        <h3>🔄 跨平台同步</h3>
+        <p>无论你在哪台电脑上，只要安装了简密客户端并连接到你的服务器，就能随时随地访问你的密码库。</p>
+    </div>
+</div>
+
+<h2>🚀 快速开始指南</h2>
+<div class="steps">
+    <h3>第一步：下载简密</h3>
+    <p>点击下方橙色按钮，进入下载页面：</p>
+    <p><a href="https://github.com/Mostafa13447/jianmi/releases" class="btn-primary" style="background: #f76707; box-shadow: 0 4px 15px rgba(247, 103, 7, 0.4);">📦 前往下载页面</a></p>
+    <p>在这个页面上，你会看到一个资源列表。请找到最新版本的 macOS 安装文件（例如 <code>jianmi-1.2.3.dmg</code> 或 <code>jianmi-1.2.3.zip</code>），点击下载。</p>
+
+    <h3>第二步：安装应用</h3>
+    <p>下载完成后：</p>
+    <ul>
+        <li>如果下载的是 <code>.dmg</code> 文件：双击打开它，然后将简密图标拖到"应用程序"文件夹。完成后，从应用程序文件夹双击打开简密。</li>
+        <li>如果下载的是 <code>.zip</code> 文件：右键点击文件，选择"打开"。系统会自动解压，你可以在解压后的文件夹中找到简密并双击运行。</li>
+    </ul>
+    <div class="note">
+        <p>💡 <strong>macOS 安全提示：</strong>如果首次打开时系统提示"无法验证开发者"，请进入"系统偏好设置" → "隐私与安全性"，在下方点击"仍要打开"即可。</p>
+    </div>
+
+    <h3>第三步：创建你的主密码</h3>
+    <p>启动简密后，使用向导创建一个<strong>主密码</strong>。这是你唯一需要记住的密码，请务必牢记！它使用高级加密算法保护你的所有数据。</p>
+    <ul>
+        <li>使用至少12个字符，混合大小写字母、数字和符号。</li>
+        <li>不要与其他任何账户共用这个密码。</li>
+        <li>建议使用密码管理器或纸笔备份（存放在安全的地方）。</li>
+    </ul>
+
+    <h3>第四步：开始添加你的密码</h3>
+    <p>点击左上角的"+"号，添加网站名称、用户名、密码等。简密会自动生成高强度随机密码（可选），你只需点击保存。从此，你只需要点击对应条目，密码就会自动复制到剪贴板。</p>
+</div>
+
+<h2>🖥️ 浏览器扩展使用说明</h2>
+<p>浏览器扩展让你在浏览网页时自动填充登录信息。目前支持 Chrome、Firefox 和 Safari。</p>
+<ol>
+    <li>在浏览器扩展商店搜索"jianmi"并安装。</li>
+    <li>点击浏览器工具栏上的简密图标。</li>
+    <li>使用你的主密码解锁（需要先安装主 mac 应用）。</li>
+    <li>当你访问某个网站时，简密会自动匹配并填入已保存的凭据。</li>
+</ol>
+
+<h2>🔧 自托管服务器设置（可选但推荐）</h2>
+<p>简密的核心优势在于自托管。如果你有一台 Linux 或 macOS 服务器（或旧的电脑），可按照以下步骤部署服务端：</p>
+<ol>
+    <li>从下载页面获取 <code>jianmi-server</code> 二进制文件（选择与你服务器系统匹配的版本）。</li>
+    <li>将文件上传到你的服务器，赋予执行权限：<code>chmod +x jianmi-server</code></li>
+    <li>运行 <code>./jianmi-server</code>，它会自动创建一个配置文件 <code>config.toml</code>。</li>
+    <li>编辑 <code>config.toml</code> 设置端口和存储路径。</li>
+    <li>再次运行即可启动服务。在 mac 客户端设置中输入你的服务器地址（例如 <code>https://your-server.com:8443</code>）。</li>
+</ol>
+<p>如需更详细的部署教程，请参阅仓库中的 <code>SERVER_SETUP.md</code> 文档。</p>
+
+<h2>🛡️ 安全与隐私</h2>
+<p>简密严格遵循安全工程最佳实践：</p>
+<ul>
+    <li><strong>加密标准：</strong>使用 libsodium (XChaCha20-Poly1305) 进行对称加密。这是目前公认最安全的现代加密算法之一。</li>
+    <li><strong>密钥派生：</strong>你的主密码通过 Argon2id 算法（内存加固型）进行密钥派生，有效抵御暴力破解。</li>
+    <li><strong>零知识设计：</strong>服务端只存储密文和元数据，没有任何解密密钥。即使服务器被入侵，攻击者也无法获取你的密码。</li>
+    <li><strong>开源审计：</strong>完整源代码在 GitHub 上公开，任何安全专家都可以检验其安全性。</li>
+</ul>
+
+<h2>❓ 常见问题 (FAQ)</h2>
+<h3>简密是免费的吗？</h3>
+<p>是的，简密完全免费开源。你可以自行托管服务端，不需要支付任何费用。</p>
+
+<h3>如果忘记主密码怎么办？</h3>
+<p>由于零知识架构，没有人（包括开发者）能恢复你的主密码。我们强烈建议你将主密码写在纸上放在安全的地方。请勿相信任何声称能找回密码的服务。</p>
+
+<h3>我可以在 Windows 上使用吗？</h3>
+<p>目前客户端仅支持 macOS（版本 11.0 及以上）。Windows 用户可以使用浏览器扩展，以及访问自托管服务器上的 Web 界面（如果部署了的话）。我们正在积极开发 Windows 版，敬请期待。</p>
+
+<h3>如何备份我的密码库？</h3>
+<p>最简单的方法是保留一份你服务器上的数据库文件的副本（通常在 <code>./data</code> 目录下）。另外，也可以导出为加密的 <code>.json</code> 文件（在客户端中操作）。</p>
+
+<h2>📞 支持与反馈</h2>
+<p>如果在使用中遇到问题，或想提出功能建议：</p>
+<ul>
+    <li>📮 访问 <a href="https://github.com/Mostafa13447/jianmi/issues">GitHub Issues</a> 提交问题。</li>
+    <li>💬 加入我们的讨论区（通过仓库页面找到链接）。</li>
+    <li>⭐ 喜欢这个项目吗？去 GitHub 上点个 Star 支持我们吧！</li>
+</ul>
+
+<h2>🔗 相关链接</h2>
+<ul>
+    <li><a href="https://github.com/Mostafa13447/jianmi">GitHub 仓库主页</a></li>
+    <li><a href="https://github.com/Mostafa13447/jianmi/releases">下载最新版本</a></li>
+    <li><strong>快速下载：</strong><a href="https://github.com/Mostafa13447/jianmi/releases">点此获取简密</a></li>
+</ul>
+
+<div style="text-align: center; margin: 60px 0 30px; padding-top: 40px; border-top: 1px solid #dee2e6;">
+    <p>© 2024 jianmi. 开源项目，使用 MIT 许可证。</p>
+    <p>Made with ❤️ for your digital privacy.</p>
+</div>
+
+</body>
+</html>
